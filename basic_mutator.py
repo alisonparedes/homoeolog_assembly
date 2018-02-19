@@ -45,11 +45,6 @@ def mutate(sequence, k_random_positions):
     return ''.join(new_sequence)
 
 
-def snp_density(sequence, k):
-    total_bp = len(sequence)
-    return k / total_bp
-
-
 def snp_density_distribution(sequence, snp_positions, interval):
     min_heap = copy.copy(snp_positions)
     heapq.heapify(min_heap)
@@ -80,10 +75,7 @@ if __name__ == "__main__":
     orig_sequence, header = read_file(args.file_name)
     random_positions = sample_positions(orig_sequence, k, args.seed)
     new_sequence = mutate(orig_sequence, random_positions)
-    snp_density = snp_density(orig_sequence, k)
     snp_distribution = snp_density_distribution(new_sequence, random_positions, interval=100)
-    print("{0} | snp density: {1} snp density distribution: {2}".format(header,
-                                                                        snp_density,
-                                                                        snp_distribution))
+    print("{0} | snp density distribution: {1}".format(header, snp_distribution))
     print("{0}".format(new_sequence))
 
