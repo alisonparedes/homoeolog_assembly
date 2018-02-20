@@ -45,21 +45,22 @@ def mutate(sequence, k_random_positions):
     return ''.join(new_sequence)
 
 
-def snp_density_distribution(sequence, snp_positions, interval):
+def avg_snp_density(sequence, snp_positions, per_bp=1000):
     min_heap = copy.copy(snp_positions)
     heapq.heapify(min_heap)
-    end_position = interval - 1
-    count = 0
-    distribution = {}
-    while end_position < len(sequence) + interval:
+    end_position = per_bp - 1
+    snps = 0
+    sum_snp_density = 0.0
+    while end_position < len(sequence) + per_bp:
         if len(min_heap) > 0 and min_heap[0] <= end_position:
             heapq.heappop(min_heap)
-            count += 1
+            snps += 1
         else:
-            end_position += interval
-            distribution[count] = distribution.get(count, 0) + 1
-            count = 0
-    return distribution
+            end_position += per_bp
+            sum_snp_density += snps/float(per_bp)
+            snps = 0
+    return sum_snp_density / (max(len(sequence)/per_bp, 1))
+
 
 
 if __name__ == "__main__":
@@ -71,11 +72,12 @@ if __name__ == "__main__":
     parser.add_argument("seed")
     args = parser.parse_args()
     k_snps = int(args.k_snps)
+    per_bp = 1000
 
     orig_sequence, header = read_file(args.file_name)
     random_positions = sample_positions(orig_sequence, k_snps, args.seed)
     new_sequence = mutate(orig_sequence, random_positions)
-    snp_distribution = snp_density_distribution(new_sequence, random_positions, interval=100)
-    print("{0} | snp density distribution: {1}".format(header, snp_distribution))
+    snp_distribution = avg_snp_density(new_sequence, random_positions, per_bp)
+    print("{0} | average snp density per {1} bp: {2}".format(header, per_bp, snp_distribution))
     print("{0}".format(new_sequence))
 
