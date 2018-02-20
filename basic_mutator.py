@@ -29,10 +29,10 @@ mutation_model = {
 }
 
 
-def sample_positions(sequence, k, seed):
+def sample_positions(sequence, k_snps, seed):
     random.seed(seed)
     last_position = len(sequence) - 1
-    k_random_positions = random.sample(range(last_position), k)
+    k_random_positions = random.sample(range(last_position), k_snps)
     return k_random_positions
 
 
@@ -67,13 +67,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("file_name")
-    parser.add_argument("k")
+    parser.add_argument("k_snps")
     parser.add_argument("seed")
     args = parser.parse_args()
-    k = int(args.k)
+    k_snps = int(args.k_snps)
 
     orig_sequence, header = read_file(args.file_name)
-    random_positions = sample_positions(orig_sequence, k, args.seed)
+    random_positions = sample_positions(orig_sequence, k_snps, args.seed)
     new_sequence = mutate(orig_sequence, random_positions)
     snp_distribution = snp_density_distribution(new_sequence, random_positions, interval=100)
     print("{0} | snp density distribution: {1}".format(header, snp_distribution))
