@@ -17,7 +17,7 @@ def read_file(file_name):
             if line[0] == '>':
                 header = line.rstrip()
             else:
-                sequence += line
+                sequence += line.rstrip()
     return sequence, header
 
 
@@ -78,6 +78,6 @@ if __name__ == "__main__":
     random_positions = sample_positions(orig_sequence, k_snps, args.seed)
     new_sequence = mutate(orig_sequence, random_positions)
     snp_distribution = avg_snp_density(new_sequence, random_positions, per_bp)
-    print("{0} | average snp density per {1} bp: {2}".format(header, per_bp, snp_distribution))
+    print("{0} | average snp density per {1} bp: {2}, total bp: {3}".format(header, per_bp, snp_distribution, len(new_sequence)))
     print("{0}".format(new_sequence))
 
