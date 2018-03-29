@@ -8,17 +8,21 @@ Example command line: python basic_mutator.py test_01.fna 1 ALISON
 import random
 import heapq
 import copy
+import re
 
 def read_file(file_name):
     sequence = ''
     header = ''
+    name = ''
     with open(file_name, 'r') as my_file:
         for line in my_file:
             if line[0] == '>':
                 header = line.rstrip()
+                find_name = re.search("^>([^\s]+)\s", header)
+                name = find_name.group(1)
             else:
                 sequence += line.rstrip()
-    return sequence, header
+    return sequence, header, name
 
 
 mutation_model = {
@@ -74,10 +78,10 @@ if __name__ == "__main__":
     k_snps = int(args.k_snps)
     per_bp = 1000
 
-    orig_sequence, header = read_file(args.file_name)
+    orig_sequence, header, name = read_file(args.file_name)
     random_positions = sample_positions(orig_sequence, k_snps, args.seed)
     new_sequence = mutate(orig_sequence, random_positions)
     snp_distribution = avg_snp_density(new_sequence, random_positions, per_bp)
-    print("{0} | average snp density per {1} bp: {2}, total bp: {3}".format(header, per_bp, snp_distribution, len(new_sequence)))
+    print("{0} | average snp density per {1} bp: {2}, total bp: {3}".format(header.replace(name, "{0}.{1}.{2}".format(name, k_snps, args.seed)), per_bp, snp_distribution, len(new_sequence)))
     print("{0}".format(new_sequence))
 
