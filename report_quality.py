@@ -4,6 +4,7 @@ import random
 import argparse
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser()
     parser.add_argument("ref_file")
     args = parser.parse_args()
@@ -11,8 +12,8 @@ if __name__ == "__main__":
     for line in sys.stdin:
         contig_file = line.strip()
         os.system("cat {0} lambdaphage.fna | muscle -out ref_contig01.fa".format(contig_file))
-        command = "csplit --prefix ref_{0}_ ref_{0}.fa '/>/' '{*}'".format(contig_file)
-        print(command)
+        command = "csplit --prefix ref_{0}_ ref_{0}.fa ".format("a file")
+        command += "'/>/' '{*}'"
         os.system(command)
         os.system("python compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file))
         report_id = random.randint(0,1000)
