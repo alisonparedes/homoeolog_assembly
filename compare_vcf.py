@@ -31,11 +31,11 @@ def main(ground_truth_vcf, observed_vcf):
             found_count += ground_truth.get((position, to_acid), 0)
         except(StopIteration):
             break
-    print("{0}\t{1}\t{2}\t{3}\t{4}\n".format(ground_truth_vcf,
-                                             observed_vcf,
-                                             found_count,
-                                             all_count,
-                                             round(found_count/float(all_count), 4)))
+    print("{0}\t{1}\t{2}\t{3}\t{4}".format(ground_truth_vcf,
+                                           observed_vcf,
+                                           found_count,
+                                           all_count,
+                                           round(found_count/float(all_count), 4)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
