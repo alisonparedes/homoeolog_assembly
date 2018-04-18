@@ -33,7 +33,7 @@ def compare_fasta(name_file_a, name_file_b, vcf_file_name):
             i += 1
             if nuc_a != nuc_b and nuc_a != '-' and nuc_b != '-':
                 with open(vcf_file_name, 'a') as vcf_file:
-                    vcf_file.write("{0}\t{1}\t.\t{2}\t.\tPASS\t.{3}\n".format(name_file_b, i, nuc_a, nuc_b))
+                    vcf_file.write("{0}\t{1}\t.\t{2}\t{3}\t.\tPASS\t.\n".format(name_file_b, i, nuc_a, nuc_b))
         except(StopIteration):
             break
 
