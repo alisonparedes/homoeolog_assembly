@@ -18,5 +18,5 @@ if __name__ == "__main__":
         command += "'/>/' '{*}'"
         os.system(command)
         os.system("python homoeolog_assembly/compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file))
-        for i in range(1, 4):
+        for i in range(1, 5):
             os.system("python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id))
