@@ -13,10 +13,21 @@ if __name__ == "__main__":
 
     for line in sys.stdin:
         contig_file = line.strip()
-        os.system("cat {0} lambdaphage.fna | muscle -out ref_{0}.fa".format(contig_file))
+
+        command = "cat {0} lambdaphage.fna | muscle -out ref_{0}.fa".format(contig_file)
+        print(command)
+        os.system(command)
+
+        print(command)
         command = "csplit --prefix ref_{0}_ ref_{0}.fa ".format(contig_file)
         command += "'/>/' '{*}'"
         os.system(command)
-        os.system("python homoeolog_assembly/compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file))
+
+        command = "python homoeolog_assembly/compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file)
+        print(command)
+        os.system(command)
+
         for i in range(1, 5):
-            os.system("python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id))
+            command = "python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id)
+            print(command)
+            os.system(command)
