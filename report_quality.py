@@ -17,6 +17,6 @@ if __name__ == "__main__":
         command = "csplit --prefix ref_{0}_ ref_{0}.fa ".format("a file")
         command += "'/>/' '{*}'"
         os.system(command)
-        os.system("python compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file))
+        os.system("python homoeolog_assembly/compare_fasta.py lambdaphage.fna ref_{0}_01 ref_{0}.vcf".format(contig_file))
         for i in range(1, 4):
-            os.system("python compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id))
+            os.system("python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id))
