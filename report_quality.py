@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     for line in sys.stdin:
         contig_file = line.strip()
-        os.system("cat {0} lambdaphage.fna | muscle -out ref_contig01.fa".format(contig_file))
+        os.system("cat {0} lambdaphage.fna | muscle -out ref_{0}.fa".format(contig_file))
         command = "csplit --prefix ref_{0}_ ref_{0}.fa ".format("a file")
         command += "'/>/' '{*}'"
         os.system(command)
