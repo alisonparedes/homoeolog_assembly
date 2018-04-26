@@ -9,6 +9,9 @@ if __name__ == "__main__":
     parser.add_argument("ref_file")
     args = parser.parse_args()
     report_id = random.randint(0,1000)
+
+    os.system("source activate mcbs913_2018")
+
     os.system("touch {0}_assembly_quality_{1}.tsv".format(args.ref_file, report_id))
 
     for line in sys.stdin:
@@ -28,6 +31,6 @@ if __name__ == "__main__":
         os.system(command)
 
         for i in range(1, 5):
-            command = "python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id)
+            command = "python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}_assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id)
             print(command)
             os.system(command)
