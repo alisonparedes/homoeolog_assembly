@@ -50,11 +50,13 @@ def compare_observed(observed_vcf, ground_truth):
             if found > 0:
                 segment_length += 1
             else:
-                lengths.append(segment_length)
+                if segment_length > 0:
+                    lengths.append(segment_length)
                 segment_length = 0
                 not_found.append(line)
         except(StopIteration):
-            lengths.append(segment_length)
+            if segment_length > 0:
+                lengths.append(segment_length)
             break
     return found_count, all_count, lengths, not_found
 
@@ -70,8 +72,8 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                                            round(found_count/float(all_count), 4),
                                                      min(lengths),
                                                      max(lengths),
-                                                     int(round(np.median(lengths), 0)),
-                                                     int(round(np.mean(lengths), 0)))
+                                                     int(round(np.median(lengths), 1)),
+                                                     int(round(np.mean(lengths), 1)))
     if args.homoeolog:
         homoeolog = read_truth(homoeolog_vcf)
         found_count, all_count, lengths, not_in_homoeolog = compare_observed(not_found, homoeolog)
