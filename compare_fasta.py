@@ -7,7 +7,7 @@ def fasta_reader(fasta_file_name):
         next_char = fasta_file.read(1)
         comment = False
         while next_char:
-            if next_char == '>':
+            if next_char in ('>','*','s'):
                 comment = True
             elif comment and next_char == '\n':
                 comment = False
