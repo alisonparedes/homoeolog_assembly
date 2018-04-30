@@ -4,7 +4,7 @@ import sys
 
 def read_contigs():
     for line in sys.stdin:
-        yield line
+        yield line.rstrip()
 
 
 if __name__ == "__main__":
