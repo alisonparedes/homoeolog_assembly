@@ -14,7 +14,8 @@ if __name__ == "__main__":
             contig = next(contigs)
             command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
             command += "lambda_diploid_snp05_01.vcf {0}".format(contig)
-            command += " --homolog lambda_diploid_snp05_03.vcf --homoeolog lambda"
+            command += " --homolog lambda_diploid_snp05_03.vcf "
+            command += " --homoeolog lambda_diploid_snp05_02.vcf"
             print(command)
             os.system(command)
         except StopIteration:
