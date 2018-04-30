@@ -9,6 +9,10 @@ def read_contigs():
 
 if __name__ == "__main__":
     contigs = read_contigs()
+    header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen\thomoeolog\tdlthefound\tdltheall"
+    header += "\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen\thomolog\tdlthofound\tdlthoall"
+    header += "\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
+    print(header)
     while True:
         try:
             contig = next(contigs)
