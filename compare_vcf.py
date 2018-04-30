@@ -58,6 +58,8 @@ def compare_observed(observed_vcf, ground_truth):
             if segment_length > 0:
                 lengths.append(segment_length)
             break
+    if len(lengths) == 0:
+        lengths.append(0)
     return found_count, all_count, lengths, not_found
 
 
