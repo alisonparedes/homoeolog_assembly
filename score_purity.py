@@ -24,7 +24,7 @@ def tsv_reader(file_name):
                 data = line.split("\t")
                 haplotype = data[0]
                 contig = data[1]
-                matched_total_percent = data[3]
+                matched_total_percent = data[4]
                 delta_homoeolog = data[12]
                 delta_homolog = data[20]
                 yield haplotype, contig, float(matched_total_percent), float(delta_homoeolog), float(delta_homolog)
