@@ -27,7 +27,7 @@ def tsv_reader(file_name):
                 matched_total_percent = data[4]
                 delta_homoeolog = data[10]
                 delta_homolog = data[18]
-                yield haplotype, contig, float(matched_total_percent), float(delta_homoeolog), float(delta_homolog)
+                yield haplotype, contig, float(matched_total_percent), int(delta_homoeolog), int(delta_homolog)
 
 
 def score(purity):
@@ -55,6 +55,7 @@ if __name__ == "__main__":
     parser.add_argument("tsv")
     args = parser.parse_args()
 
+    print("contig\tpurity_pct\tdelta_homoeolog\tdelta_homolog")
     purity = read_tsv(args.tsv)
     impurity, explained_by, delta = score(purity)
     print("IMPURITY: {0} DELTA: {1} ({2})".format(impurity, explained_by, delta))
