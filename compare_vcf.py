@@ -102,7 +102,6 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                 if length > 0:
                     len_file.write("{0}\thomolog\n".format(length))
 
-    if args.homoeolog:
         homoeolog = read_truth(homoeolog_vcf)
         found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_in_homolog, homoeolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
