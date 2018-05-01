@@ -85,21 +85,6 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
             if length > 0:
                 len_file.write("{0}\thaplotype\n".format(length))
 
-    if args.homoeolog:
-        homoeolog = read_truth(homoeolog_vcf)
-        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog)
-        summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
-                                                                   found_count,
-                                                                   all_count,
-                                                                   round(percent, 4),
-                                                                   min(lengths),
-                                                                   max(lengths),
-                                                                   round(np.median(lengths), 1),
-                                                                   round(np.mean(lengths), 1))
-        with(open("polymorph_lengths.tsv", 'a')) as len_file:
-            for length in lengths:
-                if length > 0:
-                    len_file.write("{0}\thomoeolog\n".format(length))
 
     if args.homolog:
         homolog = read_truth(homolog_vcf)
@@ -116,6 +101,23 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
             for length in lengths:
                 if length > 0:
                     len_file.write("{0}\thomolog\n".format(length))
+
+    if args.homoeolog:
+        homoeolog = read_truth(homoeolog_vcf)
+        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_in_homolog, homoeolog)
+        summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
+                                                                         found_count,
+                                                                         all_count,
+                                                                         round(percent, 4),
+                                                                         min(lengths),
+                                                                         max(lengths),
+                                                                         round(np.median(lengths), 1),
+                                                                         round(np.mean(lengths), 1))
+        with(open("polymorph_lengths.tsv", 'a')) as len_file:
+            for length in lengths:
+                if length > 0:
+                    len_file.write("{0}\thomoeolog\n".format(length))
+
     print(summary_str)
 
 
