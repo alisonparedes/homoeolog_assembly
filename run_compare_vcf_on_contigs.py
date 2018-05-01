@@ -16,7 +16,7 @@ if __name__ == "__main__":
     header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen"
     header += "\thomolog\tdlthofound\tdlthoall\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
     header += "\thomoeolog\tdlthefound\tdltheall\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen"
-    print(header)
+    print(header, flush=True)
     while True:
         try:
             contig = next(contigs)
