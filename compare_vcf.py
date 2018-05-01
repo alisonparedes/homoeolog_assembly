@@ -80,6 +80,10 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                                                      max(lengths),
                                                      int(round(np.median(lengths), 1)),
                                                      int(round(np.mean(lengths), 1)))
+    with(open("polymorph_lengths.tsv", 'a')) as len_file:
+        for length in lengths:
+            len_file.write("{0}\thaplotype\n".format(length))
+
     if args.homoeolog:
         homoeolog = read_truth(homoeolog_vcf)
         found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog)
@@ -91,6 +95,9 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                                                                    max(lengths),
                                                                    round(np.median(lengths), 1),
                                                                    round(np.mean(lengths), 1))
+        with(open("polymorph_lengths.tsv", 'a')) as len_file:
+            for length in lengths:
+                len_file.write("{0}\thomoeolog\n".format(length))
 
     if args.homolog:
         homolog = read_truth(homolog_vcf)
@@ -103,7 +110,11 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                                                                    max(lengths),
                                                                    round(np.median(lengths), 1),
                                                                    round(np.mean(lengths), 1))
+        with(open("polymorph_lengths.tsv", 'a')) as len_file:
+            for length in lengths:
+                len_file.write("{0}\thomolog\n".format(length))
     print(summary_str)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
