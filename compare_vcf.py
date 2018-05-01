@@ -60,29 +60,33 @@ def compare_observed(observed_vcf, ground_truth):
             break
     if len(lengths) == 0:
         lengths.append(0)
-    return found_count, all_count, lengths, not_found
+    if all_count == 0:
+        percent = 0
+    else:
+        percent = found_count/float(all_count)
+    return found_count, all_count, lengths, not_found, percent
 
 
 def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
     ground_truth = read_truth(ground_truth_vcf)
-    found_count, all_count, lengths, not_found = compare_observed(observed_vcf, ground_truth)
+    found_count, all_count, lengths, not_found, percent = compare_observed(observed_vcf, ground_truth)
     summary_str = ""
     summary_str = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(ground_truth_vcf,
                                            observed_vcf,
                                            found_count,
                                            all_count,
-                                           round(found_count/float(all_count), 4),
+                                           round(percent, 4),
                                                      min(lengths),
                                                      max(lengths),
                                                      int(round(np.median(lengths), 1)),
                                                      int(round(np.mean(lengths), 1)))
     if args.homoeolog:
         homoeolog = read_truth(homoeolog_vcf)
-        found_count, all_count, lengths, not_in_homoeolog = compare_observed(not_found, homoeolog)
+        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
                                                                    found_count,
                                                                    all_count,
-                                                                   round(found_count/float(all_count), 4),
+                                                                   round(percent, 4),
                                                                    min(lengths),
                                                                    max(lengths),
                                                                    round(np.median(lengths), 1),
@@ -90,11 +94,11 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
 
     if args.homolog:
         homolog = read_truth(homolog_vcf)
-        found_count, all_count, lengths, not_in_homolog = compare_observed(not_found, homolog)
+        found_count, all_count, lengths, not_in_homolog, percent = compare_observed(not_found, homolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homolog_vcf,
                                                                    found_count,
                                                                    all_count,
-                                                                   round(found_count/float(all_count), 4),
+                                                                   round(percent, 4),
                                                                    min(lengths),
                                                                    max(lengths),
                                                                    round(np.median(lengths), 1),
