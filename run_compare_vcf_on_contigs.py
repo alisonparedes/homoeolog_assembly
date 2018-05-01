@@ -13,9 +13,9 @@ if __name__ == "__main__":
     parser.add_argument("prefix")
     args = parser.parse_args()
     contigs = read_contigs()
-    header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen\thomoeolog\tdlthefound\tdltheall"
-    header += "\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen\thomolog\tdlthofound\tdlthoall"
-    header += "\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
+    header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen"
+    header += "\thomolog\tdlthofound\tdlthoall\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
+    header += "\thomoeolog\tdlthefound\tdltheall\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen"
     print(header)
     while True:
         try:
