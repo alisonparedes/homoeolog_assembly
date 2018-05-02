@@ -9,7 +9,7 @@ def read_tsv(file_name):
             haplotype, contig, contig_purity, delta_homoeolog, delta_homolog = next(tsv_file)
             global contigs
             if contig_purity > purity.get(contig, 0):
-                purity[contig] = (contig_purity, delta_homoeolog, delta_homolog)
+                purity[contig] = (haplotype, contig_purity, delta_homoeolog, delta_homolog)
         except(StopIteration):
             break
     return purity
@@ -34,8 +34,8 @@ def score(purity):
     impurity = 0.0
     sum_homoeolog = 0
     sum_homolog = 0
-    for contig, (contig_purity, delta_homoeolog, delta_homolog) in purity.iteritems():
-        print("{0}\t{1}\t{2}\t{3}".format(contig, contig_purity, delta_homoeolog, delta_homolog))
+    for contig, (haplotype, contig_purity, delta_homoeolog, delta_homolog) in purity.iteritems():
+        print("{0}\t{1}\t{2}\t{3}\t{4}".format(haplotype, contig, contig_purity, delta_homoeolog, delta_homolog))
         if contig_purity < 1:
             impurity += 1
         sum_homoeolog += delta_homoeolog
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser.add_argument("tsv")
     args = parser.parse_args()
 
-    print("contig\tpurity_pct\tdelta_homoeolog\tdelta_homolog")
+    print("haplotype\tcontig\tpurity_pct\tdelta_homoeolog\tdelta_homolog")
     purity = read_tsv(args.tsv)
     impurity, explained_by, delta = score(purity)
     print("IMPURITY: {0} DELTA: {1} ({2})".format(impurity, explained_by, delta))

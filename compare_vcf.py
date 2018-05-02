@@ -92,7 +92,7 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
     with(open("polymorph_lengths.tsv", 'a')) as len_file:
         for length in lengths:
             if length > 0:
-                len_file.write("{0}\t{1}\t{0}\thaplotype\n".format(ground_truth_vcf, observed_vcf, length))
+                len_file.write("{0}\t{1}\t{2}\thaplotype\n".format(ground_truth_vcf, observed_vcf, length))
 
 
     if args.homolog:
