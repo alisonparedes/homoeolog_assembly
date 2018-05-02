@@ -14,7 +14,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     contigs = read_contigs()
     header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen"
-    header += "\thomolog\tdlthofound\tdlthoall\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
+    #header += "\thomolog\tdlthofound\tdlthoall\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
     header += "\thomoeolog\tdlthefound\tdltheall\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen"
     print(header, flush=True)
     while True:

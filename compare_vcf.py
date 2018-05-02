@@ -31,7 +31,7 @@ def vclist_reader(observed):
         yield int(found.group(1)), found.group(2), found.group(3), line
 
 
-def compare_observed(observed_vcf, ground_truth):
+def compare_observed(observed_vcf, ground_truth, homolog=None):
     if isinstance(observed_vcf, str):
         observed_reader = vcf_reader(observed_vcf)
     else:
@@ -49,7 +49,12 @@ def compare_observed(observed_vcf, ground_truth):
             found_count += found
             if found > 0:
                 segment_length += 1
-            else:
+            elif homolog:
+                found = homolog.get((position, to_acid), 0)
+                found_count += found
+                if found > 0:
+                    segment_length += 1
+            if found == 0:
                 if segment_length > 0:
                     lengths.append(segment_length)
                 segment_length = 0
@@ -69,7 +74,11 @@ def compare_observed(observed_vcf, ground_truth):
 
 def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
     ground_truth = read_truth(ground_truth_vcf)
-    found_count, all_count, lengths, not_found, percent = compare_observed(observed_vcf, ground_truth)
+    homolog = None
+    if args.homolog:
+        homolog = read_truth(homolog_vcf)
+
+    found_count, all_count, lengths, not_found, percent = compare_observed(observed_vcf, ground_truth, homolog)
     summary_str = ""
     summary_str = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(ground_truth_vcf,
                                            observed_vcf,
@@ -87,7 +96,7 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
 
 
     if args.homolog:
-        homolog = read_truth(homolog_vcf)
+        '''
         found_count, all_count, lengths, not_in_homolog, percent = compare_observed(not_found, homolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homolog_vcf,
                                                                    found_count,
@@ -101,9 +110,9 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
             for length in lengths:
                 if length > 0:
                     len_file.write("{0}\thomolog\n".format(length))
-
+        '''
         homoeolog = read_truth(homoeolog_vcf)
-        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_in_homolog, homoeolog)
+        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
                                                                          found_count,
                                                                          all_count,
