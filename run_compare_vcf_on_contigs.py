@@ -24,24 +24,28 @@ if __name__ == "__main__":
             command += "{1}_01.vcf {0}".format(contig, args.prefix)
             command += " --homoeolog {0}_02.vcf".format(args.prefix)
             command += " --homolog {0}_03.vcf".format(args.prefix)
+            command += " --other_homoeolog {0}_04".format(args.prefix)
             os.system(command)
 
             command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
             command += "{1}_02.vcf {0}".format(contig, args.prefix)
             command += " --homoeolog {0}_01.vcf".format(args.prefix)
             command += " --homolog {0}_04.vcf".format(args.prefix)
+            command += " --other_homoeolog {0}_03".format(args.prefix)
             os.system(command)
 
             command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
             command += "{1}_03.vcf {0}".format(contig, args.prefix)
             command += " --homoeolog {0}_02.vcf".format(args.prefix)
             command += " --homolog {0}_01.vcf ".format(args.prefix)
+            command += " --other_homoeolog {0}_04".format(args.prefix)
             os.system(command)
 
             command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
             command += "{1}_04.vcf {0}".format(contig, args.prefix)
             command += " --homoeolog {0}_01.vcf".format(args.prefix)
             command += " --homolog {0}_02.vcf".format(args.prefix)
+            command += " --other_homoeolog {0}_03".format(args.prefix)
             os.system(command)
 
         except StopIteration:
