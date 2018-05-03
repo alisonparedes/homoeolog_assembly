@@ -33,7 +33,7 @@ if __name__ == "__main__":
             command += " --homolog {0}_04.vcf".format(args.prefix)
             command += " --other_homoeolog {0}_03.vcf".format(args.prefix)
             os.system(command)
-            print(command, file=sys.err)
+            print(command, file=sys.stderr)
             command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
             command += "{1}_03.vcf {0}".format(contig, args.prefix)
             command += " --homoeolog {0}_02.vcf".format(args.prefix)
