@@ -72,7 +72,7 @@ def compare_observed(observed_vcf, ground_truth, homolog=None):
     return found_count, all_count, lengths, not_found, percent
 
 
-def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
+def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf, other_homoeolog_vcf):
     ground_truth = read_truth(ground_truth_vcf)
     homolog = None
     if args.homolog:
@@ -112,7 +112,8 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf):
                     len_file.write("{0}\thomolog\n".format(length))
         '''
         homoeolog = read_truth(homoeolog_vcf)
-        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog)
+        other_homoeolog = read_truth(other_homoeolog_vcf)
+        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog, other_homoeolog)
         summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
                                                                          found_count,
                                                                          all_count,
@@ -135,6 +136,7 @@ if __name__ == "__main__":
     parser.add_argument("observed")
     parser.add_argument("--homoeolog", dest="homoeolog")
     parser.add_argument("--homolog", dest="homolog")
+    parser.add_argument("--other_homoeolog", dest="other_homoeolog")
     args = parser.parse_args()
     #print(args)
-    main(args.ground_truth, args.observed, args.homoeolog, args.homolog)
+    main(args.ground_truth, args.observed, args.homoeolog, args.homolog, args.other_homoeolog)
