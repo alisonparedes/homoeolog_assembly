@@ -125,7 +125,7 @@ def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf, other_homoe
         with(open("polymorph_lengths.tsv", 'a')) as len_file:
             for length in lengths:
                 if length > 0:
-                    len_file.write("{0}\t{1}\t{2}\thomoeolog\n".format(ground_truth, observed_vcf, length))
+                    len_file.write("{0}\t{1}\t{2}\thomoeolog\n".format(ground_truth_vcf, observed_vcf, length))
 
     print(summary_str)
 
