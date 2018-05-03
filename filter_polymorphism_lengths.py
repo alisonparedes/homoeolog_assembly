@@ -4,7 +4,7 @@ import re
 def score_reader(score_tsv):
     with(open(score_tsv, 'r')) as score_file:
         for line in score_file:
-            if line[0] != 'h':
+            if line[0] not in  ('h','I'):
                 haplotype, contig, score, delta = line.split("\t")
                 yield haplotype, contig
 
@@ -22,12 +22,11 @@ def read_scores(score_tsv):
 
 
 def filter_lengths(lengths_tsv, best_haplotype):
-    with(open("filtered_lengths.tsv"), 'w') as filtered_file:
-        with(open(lengths_tsv, 'r')) as lengths_file:
-            for line in lengths_file:
-                found = re.search(line, "^([^\s])\t([^\s])\t")
-                if found and best_haplotype[found.group(2)] == found.group(1):
-                    filtered_file.write(line)
+    with(open(lengths_tsv, 'r')) as lengths_file:
+        for line in lengths_file:
+            found = re.search("^([^\s]+)\t([^\s]+)\t", line)
+            if found and best_haplotype[found.group(2)] == found.group(1):
+                print(line.strip(), flush=True)
 
 
 if __name__ == "__main__":
