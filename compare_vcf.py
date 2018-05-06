@@ -31,7 +31,7 @@ def vclist_reader(observed):
         yield int(found.group(1)), found.group(2), found.group(3), line
 
 
-def compare_observed(observed_vcf, ground_truth):
+def compare_observed(ground_truth):
     global out_file_name
     global relationship
     global ground_truth_name
@@ -65,9 +65,9 @@ def compare_observed(observed_vcf, ground_truth):
     return found_count, all_count, percent
 
 
-def main(ground_truth_vcf, observed_vcf):
+def main(ground_truth_vcf):
     ground_truth = read_truth(ground_truth_vcf)
-    found_count, all_count, percent = compare_observed(observed_vcf, ground_truth)
+    found_count, all_count, percent = compare_observed(ground_truth)
     summary_str = "{0}\t{1}\t{2}\t{3}".format(ground_truth_vcf,
                                            #observed_vcf,
                                            found_count,
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     out_file_name = args.out_file
     ground_truth_name = args.ground_truth
     relationship = args.relationship
-    main(args.ground_truth, args.observed)
+    main(args.ground_truth)
