@@ -1,6 +1,5 @@
 import os
 import sys
-import random
 import argparse
 
 if __name__ == "__main__":
@@ -8,7 +7,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("root_file")
     args = parser.parse_args()
-    report_id = random.randint(0,1000)
 
     os.system("source activate mcbs913_2018")
 
