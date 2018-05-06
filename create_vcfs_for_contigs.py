@@ -22,7 +22,7 @@ if __name__ == "__main__":
         print(command, file=sys.stderr)
         os.system(command)
 
-        command = "python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_fasta.py {1}".format(contig_file, args.root_file)
-        command += " {0}_01 ref_{0}.vcf"
+        command = "python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_fasta.py {0}".format(args.root_file)
+        command += " {0}_01 ref_{0}.vcf".format(contig_file)
         print(command, file=sys.stderr)
         os.system(command)
