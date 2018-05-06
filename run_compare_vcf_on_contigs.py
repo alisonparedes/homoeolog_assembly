@@ -10,44 +10,34 @@ def read_contigs():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("prefix")
+    parser.add_argument("-A")
+    parser.add_argument("-a")
+    parser.add_argument("-B")
+    parser.add_argument("-b")
     args = parser.parse_args()
     contigs = read_contigs()
-    header = "haplotype\tcontig\tfound\tall\tpercent\tminlen\tmaxlen\tmedlen\tavglen"
-    #header += "\thomolog\tdlthofound\tdlthoall\tdlthopercent\tdlthominlen\tdlthomaxlen\tdlthomedlen\tdlthoavglen"
-    header += "\thomoeolog\tdlthefound\tdltheall\tdlthepercent\tdltheminlen\tdlthemaxlen\tdlthemedlen\tdltheavglen"
-    print(header, flush=True)
+    print(args, file=sys.stderr, flush=True)
+    i = 0
     while True:
         try:
             contig = next(contigs)
-            command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
-            command += "{1}_01.vcf {0}".format(contig, args.prefix)
-            command += " --homoeolog {0}_02.vcf".format(args.prefix)
-            command += " --homolog {0}_03.vcf".format(args.prefix)
-            command += " --other_homoeolog {0}_04.vcf".format(args.prefix)
+            command = ""
+            command += "cat {0}".format(contig)
+            command += " | python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py"
+            command += " {1} -o polymorphism_lengths_haplotype_04_{0}.tsv".format(i, args.A)
+            command += " --relationship homologous "
+            command += " |  python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py"
+            command += " {1} -o polymorphism_lengths_haplotype_02_{0}.tsv".format(i, args.a)
+            command += " --relationship homologous "
+            command += "|  python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py"
+            command += " {1} -o polymorphism_lengths_haplotype_01_{0}.tsv".format(i, args.B)
+            command += " --relationship homoeologous "
+            command += "|  python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py"
+            command += " {1} -o polymorphism_lengths_haplotype_03_{0}.tsv".format(i, args.b)
+            command += " --relationship homoeologous "
+            print(command, file=sys.stderr, flush=True)
             os.system(command)
-
-            command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
-            command += "{1}_02.vcf {0}".format(contig, args.prefix)
-            command += " --homoeolog {0}_01.vcf".format(args.prefix)
-            command += " --homolog {0}_04.vcf".format(args.prefix)
-            command += " --other_homoeolog {0}_03.vcf".format(args.prefix)
-            os.system(command)
-            print(command, file=sys.stderr)
-            command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
-            command += "{1}_03.vcf {0}".format(contig, args.prefix)
-            command += " --homoeolog {0}_02.vcf".format(args.prefix)
-            command += " --homolog {0}_01.vcf ".format(args.prefix)
-            command += " --other_homoeolog {0}_04.vcf".format(args.prefix)
-            os.system(command)
-
-            command = "python /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/compare_vcf.py "
-            command += "{1}_04.vcf {0}".format(contig, args.prefix)
-            command += " --homoeolog {0}_01.vcf".format(args.prefix)
-            command += " --homolog {0}_02.vcf".format(args.prefix)
-            command += " --other_homoeolog {0}_03.vcf".format(args.prefix)
-            os.system(command)
-
+            i += 1
         except StopIteration:
             break
     exit(0)
