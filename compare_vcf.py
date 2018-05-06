@@ -3,7 +3,7 @@ import re
 import sys
 
 
-def vcf_reader(vcf_file_name):
+def vcf_reader(vcf_file_name=sys.stdin):
     with open(vcf_file_name, 'r') as vcf_file:
         for line in vcf_file:
             if line[0] == '#':
@@ -36,17 +36,17 @@ def compare_observed(observed_vcf, ground_truth):
     global relationship
     global ground_truth_name
     with(open(out_file_name, 'w')) as out_file:
-        observed_reader = vcf_reader(observed_vcf)
+        observed_reader = vcf_reader()
         all_count = 0
         found_count = 0
         segment_length = 0
         while True:
             try:
                 position, _, to_acid, line = next(observed_reader)
+                out_prefix = "{0}\t{1}\t{2}".format(position, ground_truth_name, relationship)
                 all_count += 1
                 found = ground_truth.get((position, to_acid), 0)
                 found_count += found
-                out_prefix = "{0}\t{1}\t{2}\t{3}".format(position, contig, ground_truth_name, relationship)
                 if found > 0:
                     segment_length += 1
                 else:  # Not found
@@ -68,8 +68,8 @@ def compare_observed(observed_vcf, ground_truth):
 def main(ground_truth_vcf, observed_vcf):
     ground_truth = read_truth(ground_truth_vcf)
     found_count, all_count, percent = compare_observed(observed_vcf, ground_truth)
-    summary_str = "{0}\t{1}\t{2}\t{3}\t{4}".format(ground_truth_vcf,
-                                           observed_vcf,
+    summary_str = "{0}\t{1}\t{2}\t{3}".format(ground_truth_vcf,
+                                           #observed_vcf,
                                            found_count,
                                            all_count,
                                            round(percent, 4))
@@ -78,18 +78,18 @@ def main(ground_truth_vcf, observed_vcf):
 
 out_file_name = "polymorph_lengths.tsv"
 relationship = "haplotype"
-contig = None
+#contig = None
 ground_truth_name = None
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("ground_truth")
-    parser.add_argument("observed")
+    #parser.add_argument("observed")
     parser.add_argument("-o", dest="out_file")
     parser.add_argument("--relationship", dest="relationship")  # Code classifying relationshop of ground truth to homoeolog model, {
     args = parser.parse_args()
     print(args, file=sys.stderr)
-    contig = args.observed
+    #contig = args.observed
     out_file_name = args.out_file
     ground_truth_name = args.ground_truth
     relationship = args.relationship
