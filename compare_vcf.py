@@ -68,7 +68,7 @@ def compare_observed(ground_truth):
                     print(line.strip(), file=sys.stdout, flush=True)
             except StopIteration:
                 if segment_length > 0:
-                    out_file.write("{0}\t{1]\n".format(out_prefix, segment_length))
+                    out_file.write("{0}\t{1}\n".format(out_prefix, segment_length))
                 break
         if all_count == 0:
             percent = 0
