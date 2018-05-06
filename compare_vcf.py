@@ -7,15 +7,19 @@ def vcf_reader(vcf_file_name=None):
     if vcf_file_name:
         with open(vcf_file_name, 'r') as vcf_file:
             for line in vcf_file:
-                yield parse_vcf(line)
+                vcf = parse_vcf(line)
+                if vcf:
+                    yield vcf
     else:
         for line in sys.stdin:
-            yield parse_vcf(line)
+            vcf = parse_vcf(line)
+            if vcf:
+                yield vcf
 
 
 def parse_vcf(line):
     if line[0] == '#':
-        pass
+        return None
     else:
         found = re.search("^[^\s]+\t([0-9]+)\t[^\s]\t([AGCT]+)\t([AGCT]+)", line)
         return int(found.group(1)), found.group(2), found.group(3), line
