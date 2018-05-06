@@ -13,7 +13,7 @@ if __name__ == "__main__":
     for line in sys.stdin:
         contig_file = line.strip()
 
-        command = "cat {0} lambdaphage.fna | muscle -out ref_{0}.fa".format(contig_file)
+        command = "cat {0} {1} | muscle -out ref_{0}.fa".format(contig_file, args.root_file)
         print(command, file=sys.stderr)
         os.system(command)
 
