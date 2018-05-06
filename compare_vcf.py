@@ -3,14 +3,22 @@ import re
 import sys
 
 
-def vcf_reader(vcf_file_name=sys.stdin):
-    with open(vcf_file_name, 'r') as vcf_file:
-        for line in vcf_file:
-            if line[0] == '#':
-                pass
-            else:
-                found = re.search("^[^\s]+\t([0-9]+)\t[^\s]\t([AGCT]+)\t([AGCT]+)", line)
-                yield int(found.group(1)), found.group(2), found.group(3), line
+def vcf_reader(vcf_file_name=None):
+    if vcf_file_name:
+        with open(vcf_file_name, 'r') as vcf_file:
+            for line in vcf_file:
+                yield parse_vcf(line)
+    else:
+        for line in sys.stdin:
+            yield parse_vcf(line)
+
+
+def parse_vcf(line):
+    if line[0] == '#':
+        pass
+    else:
+        found = re.search("^[^\s]+\t([0-9]+)\t[^\s]\t([AGCT]+)\t([AGCT]+)", line)
+        return int(found.group(1)), found.group(2), found.group(3), line
 
 
 def read_truth(ground_truth_vcf):
