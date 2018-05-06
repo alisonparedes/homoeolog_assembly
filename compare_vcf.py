@@ -1,7 +1,6 @@
 import argparse
 import re
-import numpy as np
-
+import sys
 
 
 def vcf_reader(vcf_file_name):
@@ -25,118 +24,73 @@ def read_truth(ground_truth_vcf):
             break
     return ground_truth
 
+
 def vclist_reader(observed):
     for line in observed:
         found = re.search("^[^\s]+\t([0-9]+)\t[^\s]\t([AGCT]+)\t([AGCT]+)", line)
         yield int(found.group(1)), found.group(2), found.group(3), line
 
 
-def compare_observed(observed_vcf, ground_truth, homolog=None):
-    if isinstance(observed_vcf, str):
+def compare_observed(observed_vcf, ground_truth):
+    global out_file_name
+    global relationship
+    global ground_truth_name
+    with(open(out_file_name, 'w')) as out_file:
         observed_reader = vcf_reader(observed_vcf)
-    else:
-        observed_reader = vclist_reader(observed_vcf)
-    all_count = 0
-    found_count = 0
-    lengths = list()
-    segment_length = 0
-    not_found = []
-    while True:
-        try:
-            position, _, to_acid, line = next(observed_reader)
-            all_count += 1
-            found = ground_truth.get((position, to_acid), 0)
-            found_count += found
-            if found > 0:
-                segment_length += 1
-            elif homolog:
-                found = homolog.get((position, to_acid), 0)
+        all_count = 0
+        found_count = 0
+        segment_length = 0
+        while True:
+            try:
+                position, _, to_acid, line = next(observed_reader)
+                all_count += 1
+                found = ground_truth.get((position, to_acid), 0)
                 found_count += found
+                out_prefix = "{0}\t{1}\t{2}\t{3}".format(position, contig, ground_truth_name, relationship)
                 if found > 0:
                     segment_length += 1
-            if found == 0:
+                else:  # Not found
+                    if segment_length > 0:
+                        out_file.write("{0}\t{1}\n".format(out_prefix, segment_length))
+                    segment_length = 0
+                    print(line.strip(), file=sys.stdout, flush=True)
+            except StopIteration:
                 if segment_length > 0:
-                    lengths.append(segment_length)
-                segment_length = 0
-                not_found.append(line)
-        except(StopIteration):
-            if segment_length > 0:
-                lengths.append(segment_length)
-            break
-    if len(lengths) == 0:
-        lengths.append(0)
-    if all_count == 0:
-        percent = 0
-    else:
-        percent = found_count/float(all_count)
-    return found_count, all_count, lengths, not_found, percent
+                    out_file.write("{0}\t{1]\n".format(out_prefix, segment_length))
+                break
+        if all_count == 0:
+            percent = 0
+        else:
+            percent = found_count/float(all_count)
+    return found_count, all_count, percent
 
 
-def main(ground_truth_vcf, observed_vcf, homoeolog_vcf, homolog_vcf, other_homoeolog_vcf):
+def main(ground_truth_vcf, observed_vcf):
     ground_truth = read_truth(ground_truth_vcf)
-    homolog = None
-    if args.homolog:
-        homolog = read_truth(homolog_vcf)
-
-    found_count, all_count, lengths, not_found, percent = compare_observed(observed_vcf, ground_truth, homolog)
-    summary_str = ""
-    summary_str = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(ground_truth_vcf,
+    found_count, all_count, percent = compare_observed(observed_vcf, ground_truth)
+    summary_str = "{0}\t{1}\t{2}\t{3}\t{4}".format(ground_truth_vcf,
                                            observed_vcf,
                                            found_count,
                                            all_count,
-                                           round(percent, 4),
-                                                     min(lengths),
-                                                     max(lengths),
-                                                     int(round(np.median(lengths), 1)),
-                                                     int(round(np.mean(lengths), 1)))
-    with(open("polymorph_lengths.tsv", 'a')) as len_file:
-        for length in lengths:
-            if length > 0:
-                len_file.write("{0}\t{1}\t{2}\thaplotype\n".format(ground_truth_vcf, observed_vcf, length))
+                                           round(percent, 4))
 
+    print(summary_str, file=sys.stderr)
 
-    if args.homolog:
-        '''
-        found_count, all_count, lengths, not_in_homolog, percent = compare_observed(not_found, homolog)
-        summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homolog_vcf,
-                                                                   found_count,
-                                                                   all_count,
-                                                                   round(percent, 4),
-                                                                   min(lengths),
-                                                                   max(lengths),
-                                                                   round(np.median(lengths), 1),
-                                                                   round(np.mean(lengths), 1))
-        with(open("polymorph_lengths.tsv", 'a')) as len_file:
-            for length in lengths:
-                if length > 0:
-                    len_file.write("{0}\thomolog\n".format(length))
-        '''
-        homoeolog = read_truth(homoeolog_vcf)
-        other_homoeolog = read_truth(other_homoeolog_vcf)
-        found_count, all_count, lengths, not_in_homoeolog, percent = compare_observed(not_found, homoeolog, other_homoeolog)
-        summary_str += "\t{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(homoeolog_vcf,
-                                                                         found_count,
-                                                                         all_count,
-                                                                         round(percent, 4),
-                                                                         min(lengths),
-                                                                         max(lengths),
-                                                                         round(np.median(lengths), 1),
-                                                                         round(np.mean(lengths), 1))
-        with(open("polymorph_lengths.tsv", 'a')) as len_file:
-            for length in lengths:
-                if length > 0:
-                    len_file.write("{0}\t{1}\t{2}\thomoeolog\n".format(ground_truth_vcf, observed_vcf, length))
-
-    print(summary_str)
-
+out_file_name = "polymorph_lengths.tsv"
+relationship = "haplotype"
+contig = None
+ground_truth_name = None
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("ground_truth")
     parser.add_argument("observed")
-    parser.add_argument("--homoeolog", dest="homoeolog")
-    parser.add_argument("--homolog", dest="homolog")
-    parser.add_argument("--other_homoeolog", dest="other_homoeolog")
+    parser.add_argument("-o", dest="out_file")
+    parser.add_argument("--relationship", dest="relationship")  # Code classifying relationshop of ground truth to homoeolog model, {
     args = parser.parse_args()
-    #print(args)
-    main(args.ground_truth, args.observed, args.homoeolog, args.homolog, args.other_homoeolog)
+    print(args, file=sys.stderr)
+    contig = args.observed
+    out_file_name = args.out_file
+    ground_truth_name = args.ground_truth
+    relationship = args.relationship
+    main(args.ground_truth, args.observed)

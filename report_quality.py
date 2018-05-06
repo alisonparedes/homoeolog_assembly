@@ -30,7 +30,9 @@ if __name__ == "__main__":
         print(command)
         os.system(command)
 
+        '''
         for i in range(1, 5):
             command = "python homoeolog_assembly/compare_vcf.py {0}_0{1}.vcf ref_{2}.vcf >> {0}_assembly_quality_{3}.tsv".format(args.ref_file, i, contig_file, report_id)
             print(command)
             os.system(command)
+        '''

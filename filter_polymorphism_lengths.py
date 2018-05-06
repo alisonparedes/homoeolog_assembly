@@ -1,6 +1,7 @@
 import argparse
 import re
 
+
 def score_reader(score_tsv):
     with(open(score_tsv, 'r')) as score_file:
         for line in score_file:
