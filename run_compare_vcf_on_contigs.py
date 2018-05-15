@@ -1,3 +1,10 @@
+"""
+Example: /home/mcbs913_2018/shared/homoeologs_assembly/experiments_lambda/diploid/alf/div_05pct/illumina$ ls ref_contig_??.vcf | python3 /home/mcbs913_2018/shared/homoeologs_assembly/homoeolog_assembly/run_compare_vcf_on_contigs.py -A ../homolog5-1.vcf -a ../homolog5-1prime.vcf -B ../homolog5-2.vcf -b ../homolog5-2prime.vcf 2> bounce.log > delta.log
+
+Combine resulting .tsvs into one file for analysis. Example: cat poly*tsv > polymorphism_lengths_alf_05.tsv
+
+"""
+
 import os
 import sys
 import argparse

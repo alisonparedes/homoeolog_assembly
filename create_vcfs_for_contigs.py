@@ -8,7 +8,7 @@ if __name__ == "__main__":
     parser.add_argument("root_file")
     args = parser.parse_args()
 
-    os.system("source activate mcbs913_2018")
+    #os.system("source activate mcbs913_2018")
 
     for line in sys.stdin:
         contig_file = line.strip()
